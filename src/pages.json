@@ -1,0 +1,99 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/collect/collect",
+			"style": {
+				"navigationBarTitleText": "合集"
+			}
+		},
+		{
+			"path": "pages/detail/detail",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/discovery/discovery",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/upload/upload",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hot/hot",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+		}
+	},
+	"tabBar": {
+		"color": "#C6CEDD",
+		"selectedColor": "#5B67CA",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "推荐",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/homeSelected.png"
+			},
+			{
+				"pagePath": "pages/discovery/discovery",
+				"text": "发现",
+				"iconPath": "static/tabbar/discovery.png",
+				"selectedIconPath": "static/tabbar/discoverySelected.png"
+			},
+			{
+				"pagePath": "pages/upload/upload",
+				"text": "",
+				"iconPath": "static/tabbar/Ellipse 252@2x.png",
+				"selectedIconPath": "static/tabbar/Ellipse 252@2x.png"
+			},
+			{
+				"pagePath": "pages/hot/hot",
+				"text": "精选",
+				"iconPath": "static/tabbar/article.png",
+				"selectedIconPath": "static/tabbar/articleSelected.png"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"text": "我的",
+				"iconPath": "static/tabbar/Folder.png",
+				"selectedIconPath": "static/tabbar/FolderSelected.png"
+			}
+		]
+	}
+}
