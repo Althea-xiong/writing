@@ -12,6 +12,10 @@ node_modules
 dist
 *.local
 
+.env
+.env.development
+.env.production
+
 # Editor directories and files
 .idea
 *.suo

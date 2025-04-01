@@ -18,14 +18,14 @@
       </swiper>
     </view>
     <view class="select">
-      <common-title>
+      <common-title @moreClick="click_more('text')">
         <template #left>
           <view class="text">精选摘录</view>
         </template>
       </common-title>
-      <view class="content">
+      <view class="content" @click="click_more('detail')">
         <view class="desc">
-          昔者庄周梦为胡蝶，栩栩然胡蝶也。自喻适志与！不知周栩栩然胡蝶也。栩栩然胡蝶也。栩栩然胡蝶也。
+          {{ (hot_texts.length && hot_texts[0].content) || "" }}
         </view>
         <image
           src="../../common/images/Rectangle 2165@2x.png"
@@ -35,7 +35,7 @@
       </view>
     </view>
     <view class="recommand">
-      <common-title>
+      <common-title @moreClick="click_more('album')">
         <template #left>
           <view class="text">推荐专辑</view>
         </template>
@@ -50,21 +50,16 @@
       </view>
     </view>
     <view class="hot">
-      <common-title>
+      <common-title @moreClick="click_more('tag')">
         <template #left>
           <view class="text">热门分类</view>
         </template>
       </common-title>
       <view class="content">
-        <view class="box">
+        <view v-for="(v, i) in hot_tags" :key="i" class="box">
           <image src="../../common/images/Ellipse 186@2x.png" class="pic" />
-          <view class="tag">#文学</view>
-          <view class="count">222帖子</view>
-        </view>
-        <view class="box">
-          <image src="../../common/images/Ellipse 186@2x.png" class="pic" />
-          <view class="tag">#文学</view>
-          <view class="count">222帖子</view>
+          <view class="tag">{{ `#${v.name}` }}</view>
+          <view class="count">{{ `${v.texts.length}帖子` }}</view>
         </view>
       </view>
     </view>
@@ -72,7 +67,139 @@
 </template>
 
 <script setup>
-import { getStatusBarHeight, getTitleBarHeight } from "../../utils/system";
+import { onMounted, ref } from "vue";
+
+import { get_collections_list } from "@/api";
+import {
+  getStatusBarHeight,
+  getTitleBarHeight,
+  CollectToUserType,
+  CollectionType,
+} from "@/utils";
+
+const hot_texts = ref([]);
+const hot_albums = ref([]);
+const hot_tags = ref([]);
+
+onMounted(() => {
+  init();
+});
+
+async function init() {
+  try {
+    const [texts, albums, tags] = await Promise.all([
+      get_hot_idiom(),
+      get_hot_albums(),
+      get_hot_tags(),
+    ]);
+
+    hot_texts.value = texts;
+    hot_albums.value = albums;
+    hot_tags.value = tags;
+  } catch (error) {
+    console.log("inited failed！");
+    throw error;
+  }
+}
+
+// 处理点击跳转交互操作
+async function click_more(type) {
+  // TODO: 目前不是自定义tabbar，redirectTo文档显示不能传递参数
+  switch (type) {
+    case "text":
+      return uni.switchTab({
+        url: "/pages/discovery/discovery?type=1&tab=0",
+      });
+    case "album":
+      return uni.switchTab({
+        url: "/pages/discovery/discovery?type=1&tab=1",
+      });
+    case "tag":
+      return uni.switchTab({
+        url: "/pages/discovery/discovery?type=1&tab=2",
+      });
+    case "detail":
+      return uni.navigateTo({
+        url: "/pages/detail/detail",
+      });
+    default:
+      console.log("输入类型错误");
+  }
+}
+
+// 获取热门语录，点赞最多的
+async function get_hot_idiom() {
+  // 获取点赞表中的textid
+  const textIds = await _get_likes_ids(CollectToUserType.texts);
+
+  const texts_result = await get_collections_list(CollectionType.Texts, {
+    queries: [
+      {
+        method: "equal",
+        attribute: "$id",
+        values: textIds,
+      },
+      { method: "select", values: ["$id", "*"] },
+    ],
+  });
+  return texts_result.documents || [];
+}
+
+// 获取热门专辑，点赞最多的
+async function get_hot_albums() {
+  // 获取点赞表中的专辑id
+  const albumsIds = await _get_likes_ids(CollectToUserType.albums);
+
+  const albums_result = await get_collections_list(CollectionType.Albums, {
+    queries: [
+      {
+        method: "equal",
+        attribute: "$id",
+        values: albumsIds,
+      },
+      { method: "select", values: ["$id", "*"] },
+    ],
+  });
+  return albums_result.documents || [];
+}
+
+// 获取热门标签，点赞最多的
+async function get_hot_tags() {
+  // 获取点赞表中的标签id
+  const tagsIds = await _get_likes_ids(CollectToUserType.tags);
+
+  const tags_result = await get_collections_list(CollectionType.Tags, {
+    queries: [
+      {
+        method: "equal",
+        attribute: "$id",
+        values: tagsIds,
+      },
+    ],
+  });
+  return tags_result.documents || [];
+}
+
+// 根据类别，获取获取点赞表的目标id
+async function _get_likes_ids(type, limit = 10, offset = 0) {
+  const text_like_result = await get_collections_list(CollectionType.Likes, {
+    queries: [
+      {
+        method: "equal",
+        attribute: "targetType",
+        values: [type],
+      },
+      { method: "select", values: ["$id", "targetType", "targetId"] },
+      { method: "limit", values: [limit] },
+      { method: "offset", values: [offset] },
+    ],
+  });
+
+  const targetIds = text_like_result.documents.map((item) => item.targetId);
+  if (!targetIds.length) return [];
+
+  return targetIds;
+}
 </script>
 
 <style lang="scss" scoped>

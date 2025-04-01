@@ -4,14 +4,22 @@
       <slot name="left"></slot>
     </view>
 
-    <navigator class="right" url="">
+    <navigator class="right" @click="handleMoreClick" url="">
       <text>更多</text>
       <uni-icons type="right" size="15"></uni-icons>
     </navigator>
   </view>
 </template>
 
-<script setup></script>
+<script setup>
+import { defineEmits } from "vue";
+
+const emit = defineEmits(["moreClick"]);
+
+function handleMoreClick() {
+  emit("moreClick");
+}
+</script>
 
 <style lang="scss" scoped>
 .nav {
