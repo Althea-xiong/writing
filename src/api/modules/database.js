@@ -1,5 +1,6 @@
 import { request } from "../request";
 import { generateQueryParams } from "@/utils";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  *
@@ -28,12 +29,13 @@ export const get_collections_list = (collectionType, data = {}) => {
  * @returns {Promise} - This function does not return a value.
  */
 export const get_collection_by_id = (collectionType, documentId, data = {}) => {
+  const params_str = generateQueryParams(data.queries);
+
   return request({
     url: `/databases/${
       import.meta.env.VITE_DATABASE_ID
-    }/collections/${collectionType}/documents/${documentId}`,
+    }/collections/${collectionType}/documents/${documentId}/${params_str || ""}`,
     method: "get",
-    data,
   });
 };
 
@@ -50,7 +52,10 @@ export const create_collection_document = (collectionType, data = {}) => {
       import.meta.env.VITE_DATABASE_ID
     }/collections/${collectionType}/documents`,
     method: "post",
-    data,
+    data: {
+      documentId: uuidv4(),
+      data
+    },
   });
 };
 
