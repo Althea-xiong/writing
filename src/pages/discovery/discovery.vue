@@ -64,18 +64,34 @@
         </view>
       </view>
     </view>
+
+    <TabBar index="discovery"></TabBar>
   </view>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+
 import { getStatusBarHeight, getTitleBarHeight } from "../../utils/system";
+
 const titles = ref(["社区", "发现"]);
-const items = ref(["推荐", "专辑", "标签", "所有"]);
+const items = ref(["所有", "专辑", "标签"]);
 const sorts = ref(["文学", "诗词", "电影", "语录", "段子"]);
-const activeIndex = ref(0);
-const activeIndex1 = ref(1);
+const activeIndex = ref(0); // 社区、发现的索引
+const activeIndex1 = ref(0); // 所有、专辑、标签的索引
 const activeIndex2 = ref(0);
+
+onLoad((options) => {
+  if (options.type) {
+    activeIndex.value = Number(options.type);
+  }
+  if (options.tab) {
+    activeIndex1.value = Number(options.tab);
+  }
+  console.log("options", options);
+});
+
 const goCollect = () => {
   uni.navigateTo({
     url: "/pages/collect/collect",

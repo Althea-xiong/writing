@@ -63,6 +63,8 @@
         </view>
       </view>
     </view>
+
+    <TabBar index="home"></TabBar>
   </view>
 </template>
 
@@ -104,18 +106,17 @@ async function init() {
 
 // 处理点击跳转交互操作
 async function click_more(type) {
-  // TODO: 目前不是自定义tabbar，redirectTo文档显示不能传递参数
   switch (type) {
     case "text":
-      return uni.switchTab({
+      return uni.redirectTo({
         url: "/pages/discovery/discovery?type=1&tab=0",
       });
     case "album":
-      return uni.switchTab({
+      return uni.redirectTo({
         url: "/pages/discovery/discovery?type=1&tab=1",
       });
     case "tag":
-      return uni.switchTab({
+      return uni.redirectTo({
         url: "/pages/discovery/discovery?type=1&tab=2",
       });
     case "detail":
@@ -203,6 +204,9 @@ async function _get_likes_ids(type, limit = 10, offset = 0) {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  padding-bottom: 148rpx;
+}
 .title {
   display: flex;
   align-items: center;

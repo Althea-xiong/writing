@@ -50,6 +50,8 @@
         <view v-show="activeIndex === 3">评论内容</view>
       </view>
     </view>
+
+    <TabBar index="user"></TabBar>
   </view>
 </template>
 

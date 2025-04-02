@@ -2,7 +2,11 @@
   <view class="hotLayout">
     <view :style="{ height: getStatusBarHeight() + 'px' }"></view>
     <view class="title" :style="{ height: getTitleBarHeight() + 'px' }">
-      <image src="../../static/images/goBack.png" class="goBack" />
+      <image
+        @click="goBack"
+        src="../../static/images/goBack.png"
+        class="goBack"
+      />
       <image src="../../static/images/copy.png" class="copy" />
       <view class="name">寻·觅</view>
     </view>
@@ -52,6 +56,10 @@ const onSwiperChange = (e) => {
   currentIndex.value = e.detail.current;
   currentBg.value = list.value[currentIndex.value].bg;
 };
+
+function goBack() {
+  uni.navigateBack();
+}
 </script>
 <style lang="scss" scoped>
 .hotLayout {
