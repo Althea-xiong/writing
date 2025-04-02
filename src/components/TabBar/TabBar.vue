@@ -65,9 +65,14 @@ const tabBars = ref([
  * @param url 路径 为空和路径一致时不跳转
  */
 function onNav(tabItem) {
-  if (!tabItem || tabItem.id === index.value) return;
+  if (!tabItem || tabItem.id === index.value || tabItem.id === "submit") return;
 
-  uni.navigateTo({
+  if (tabItem.id === "hot") {
+    return uni.navigateTo({
+      url: tabItem.pagePath,
+    });
+  }
+  uni.redirectTo({
     url: tabItem.pagePath,
   });
 }
@@ -131,10 +136,10 @@ function onNav(tabItem) {
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  image {
-    width: 56rpx;
-    height: 56rpx;
-  }
+.tab-plus image {
+  width: 56rpx;
+  height: 56rpx;
 }
 </style>
